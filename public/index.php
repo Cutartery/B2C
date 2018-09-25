@@ -1,12 +1,14 @@
 <?php
 
-define(ROOT,__DIR__.'/../');
+define('ROOT',__DIR__.'/../');
+
+require(ROOT.'libs/functions.php');
 
 //调用自己自动加载
 function load($class)
 {
     $path = str_replace('\\','/',$class);
-    require(ROOT.$path.'.php');
+    require(ROOT . $path . '.php');
 }
 spl_autoload_register('load');
 
@@ -17,7 +19,7 @@ $action = 'index';
 if(isset($_SERVER['PATH_INFO']))
 {
     $router = explode('/',$_SERVER['PATH_INFO']);
-    $controller = '\controller\\'.ucfirst($router[1]).'Controller';
+    $controller = '\controllers\\'.ucfirst($router[1]).'Controller';
     $action = $router[2];
 }
 $c = new $controller;
