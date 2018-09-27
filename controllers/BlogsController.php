@@ -15,7 +15,11 @@ class BlogsController{
     //处理添加表单
     public function insert()
     {
-
+        $blog = new \models\Blogs;
+        //为模型填充数据
+        $blog->fill($_POST);
+        //插入数据库
+        $blog->insert();
     }
 
     //显示修改表单
