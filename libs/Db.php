@@ -36,4 +36,9 @@ class Db
     {
         return $this->_pod->exec($sql);
     }
+    //获取最新的id
+    public function lastInsertId()
+    {
+        return $this->_pdo->lastInsertId();
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace models;
 
+use PDO;
+
 class Model{
     protected $_db;
     //操作的表名，具体的值由子类设置
@@ -75,9 +77,9 @@ class Model{
             'per_page' =>20,
         ];
         //合并用户的配置
-        if($options)
+        if($option)
         {
-            $_option = array_merge($_option,$options);
+            $_option = array_merge($_option,$option);
         }
         //翻页
         $page = isset($_GET['page'])?max(1,(int)$_GET['page']) : 1;
