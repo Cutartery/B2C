@@ -17,7 +17,18 @@ class Model{
 
     protected function _before_write(){}
     protected function _after_write(){}
-    protected function _before_delete(){}
+        //删除之前被调用（钩子函数，定义好侯自动被调用）
+    protected function _before_delete()
+    {
+        //如果是修改就删除图片
+        if(isset($_GET['id']))
+        {
+            //先从数据库中取出原图片LOGO
+            $ol = $this->findOne($_GET['id']);
+            //删除
+            @unlink(ROOT.'public'.$ol['logo']);
+        }
+    }
     protected function _after_delete(){}
 
 
