@@ -86,6 +86,8 @@ class Model{
             'order_by' => 'id',
             'order_way' => 'desc',
             'per_page' =>20,
+            'join'=>'',
+            'groupby'=>'',
         ];
         //合并用户的配置
         if($option)
@@ -97,7 +99,9 @@ class Model{
         $offset = ($page-1)*$_option['per_page'];
         $sql = "SELECT {$_option['fields']} 
                 FROM {$this->table}
+                {$_option['join']}
                 WHERE {$_option['where']}
+                {$_option['groupby']}
                 ORDER BY {$_option['order_by']} {$_option['order_way']}
                 LIMIT $offset,{$_option['per_page']}";
         $stmt = $this->_db->prepare($sql);
@@ -141,5 +145,36 @@ class Model{
             }
         }
         $this->data = $data;
+    }
+    //递归树形结构的数据
+    public function tree()
+    {
+        //先取出所有的权限
+        $data = $this->findAll();
+        //递归重新排序
+        $ret = $this->_tree($data['data']);
+        return $ret;
+    }
+    //递归排序
+    //参数一。排序的数据
+    //参数二、上级id
+    //参数三、第几级
+    protected function _tree($data,$parent_id=0,$level=0)
+    {
+        //定义一个数组保存排序好之后的数据
+        static $_ret = [];
+        foreach($data as $v)
+        {
+            if($v['parent_id'] == $parent_id)
+            {
+                //级别
+                $v['level'] = $level;
+                //挪到排序之后的数组中
+                $_ret[] = $v;
+                //找$v的子分类
+                $this->_tree($data,$v['id'],$level+1);
+            }
+        }
+        return $_ret;
     }
 }
